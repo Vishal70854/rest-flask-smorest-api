@@ -1,16 +1,16 @@
+import uuid
+from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-
-from db import db
-from models import StoreModel
 from schemas import StoreSchema
-
+from models import StoreModel
+from db import db
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 blp = Blueprint("Stores", "stores", description="Operations on stores")
 
 
-@blp.route("/store/<string:store_id>")
+@blp.route("/store/<int:store_id>")
 class Store(MethodView):
     @blp.response(200, StoreSchema)
     def get(self, store_id):
