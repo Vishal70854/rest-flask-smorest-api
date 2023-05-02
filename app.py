@@ -1,4 +1,7 @@
 import os
+import redis
+from rq import Queue
+
 from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
@@ -18,6 +21,10 @@ from dotenv import load_dotenv
 def create_app(db_url=None):
     app = Flask(__name__)
     load_dotenv()
+    connection = redis.from_url(
+        os.getenv("REDIS_URL")
+    )  # Get this from Render.com or run in Docker
+    app.queue = Queue("emails", connection=connection)
     
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Stores REST API"
